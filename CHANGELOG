@@ -1,3 +1,9 @@
+2003-11-14  James Walker  <walkah@walkah.net>
+
+	* blogapi.module: modified blogapi_blogger_title to check for <title> 
+	tags (apparently used by w.bloggar) and coding standards cleanups.
+	
+
 2003-11-07  James Walker  <walkah@walkah.net>
 
 	* blogapi.module: initial release

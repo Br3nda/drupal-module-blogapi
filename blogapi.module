@@ -1,6 +1,6 @@
 <?php
 
-// $Id: blogapi.module,v 1.1 2003/11/10 00:04:35 walkah Exp $
+// $Id: blogapi.module,v 1.2 2003/11/15 01:07:37 walkah Exp $
 
 function blogapi_help($section) {
   $output = '';
@@ -18,20 +18,20 @@ function blogapi_help($section) {
 }
 
 function blogapi_xmlrpc() {
-  $methods = array('blogger.getUsersBlogs' => array('function' => 'blogapi_getUsersBlogs'),
-		   'blogger.newPost' => array('function' => 'blogapi_newPost'),
-		   'blogger.editPost' => array('function' => 'blogapi_editPost'),
-                   'blogger.deletePost' => array('function' => 'blogapi_deletePost'),
-		   'blogger.getRecentPosts' => array('function' => 'blogapi_getRecentPosts'),
-                   'metaWeblog.newPost' => array('function' => 'blogapi_newPost'),
-                   'metaWeblog.editPost' => array('function' => 'blogapi_editPost'),
-                   'metaWeblog.getPost' => array('function' => 'blogapi_getPost'),
-                   'metaWeblog.newMediaObject' => array('function' => 'blogapi_newMediaObject'),
-                   'metaWeblog.getCategories' => array('function' => 'blogapi_getCategories'),
-                   'metaWeblog.getRecentPosts' => array('function' => 'blogapi_getRecentPosts'),
-                   'mt.getCategoryList' => array('function' => 'blogapi_getCategoryList'),
-                   'mt.getPostCategories' => array('function' => 'blogapi_getPostCategories'),
-                   'mt.setPostCategories' => array('function' => 'blogapi_setPostCategories')
+  $methods = array('blogger.getUsersBlogs' => array('function' => 'blogapi_get_users_blogs'),
+		   'blogger.newPost' => array('function' => 'blogapi_new_post'),
+		   'blogger.editPost' => array('function' => 'blogapi_edit_post'),
+                   'blogger.deletePost' => array('function' => 'blogapi_delete_post'),
+		   'blogger.getRecentPosts' => array('function' => 'blogapi_get_recent_posts'),
+                   'metaWeblog.newPost' => array('function' => 'blogapi_new_post'),
+                   'metaWeblog.editPost' => array('function' => 'blogapi_edit_post'),
+                   'metaWeblog.getPost' => array('function' => 'blogapi_get_post'),
+                   'metaWeblog.newMediaObject' => array('function' => 'blogapi_new_media_object'),
+                   'metaWeblog.getCategories' => array('function' => 'blogapi_get_categories'),
+                   'metaWeblog.getRecentPosts' => array('function' => 'blogapi_get_recent_posts'),
+                   'mt.getCategoryList' => array('function' => 'blogapi_get_category_list'),
+                   'mt.getPostCategories' => array('function' => 'blogapi_get_post_categories'),
+                   'mt.setPostCategories' => array('function' => 'blogapi_set_post_categories')
                    );
   
   return $methods;
@@ -39,7 +39,7 @@ function blogapi_xmlrpc() {
 
 /** api functions */
 
-function blogapi_getUsersBlogs($req_params) {
+function blogapi_get_users_blogs($req_params) {
   $params = blogapi_convert($req_params);
   $user = blogapi_validate_user($params[1], $params[2]);
   if ($user->uid) {
@@ -49,12 +49,13 @@ function blogapi_getUsersBlogs($req_params) {
                             "struct");
     $resp = new xmlrpcval(array($struct), "array");
     return new xmlrpcresp($resp);
-  } else {
+  }
+  else {
     return blogapi_error(message_access());
   }
 }
 
-function blogapi_getUserInfo($req_params) {
+function blogapi_get_user_info($req_params) {
   $params = blogapi_convert($req_params);
   $user = blogapi_validate_user($params[1], $params[2]);
   if ($user->uid) {
@@ -66,12 +67,13 @@ function blogapi_getUserInfo($req_params) {
                                   "url" => new xmlrpcval(url('blog/view/' . $user->uid), "string")), 
                             "struct");
     return new xmlrpcresp($struct);
-  } else {
+  }
+  else {
     return blogapi_error(message_access());
   }
 }
 
-function blogapi_newPost($req_params) {
+function blogapi_new_post($req_params) {
   global $user;
   
   $params = blogapi_convert($req_params);
@@ -89,7 +91,8 @@ function blogapi_newPost($req_params) {
   if (is_array($params[3])) {
     $title = $params[3]['title'];
     $body = $params[3]['description'];
-  } else {
+  }
+  else {
     $title = blogapi_blogger_title($params[3]);
     $body = $params[3];
   }
@@ -123,7 +126,7 @@ function blogapi_newPost($req_params) {
   return blogapi_error(t("Error storing node"));
 }
 
-function blogapi_editPost($req_params) {
+function blogapi_edit_post($req_params) {
   global $user;
 
   $params = blogapi_convert($req_params);
@@ -145,7 +148,8 @@ function blogapi_editPost($req_params) {
   if (is_array($params[3])) {
     $title = $params[3]['title'];
     $body = $params[3]['description'];
-  } else {
+  }
+  else {
     $title = blogapi_blogger_title($params[3]);
     $body = $params[3];
   }
@@ -168,7 +172,7 @@ function blogapi_editPost($req_params) {
   return blogapi_error(t("Error storing node"));
 }
 
-function blogapi_getPost($req_params) {
+function blogapi_get_post($req_params) {
   global $user;
 
   $params = blogapi_convert($req_params);
@@ -188,7 +192,7 @@ function blogapi_getPost($req_params) {
   return new xmlrpcresp($blog);
 }
 
-function blogapi_deletePost($req_params) {
+function blogapi_delete_post($req_params) {
   global $user;
 
   $params = blogapi_convert($req_params);
@@ -202,11 +206,11 @@ function blogapi_deletePost($req_params) {
   return new xmlrpcresp(new xmlrpcval(true, "boolean"));
 }
 
-function blogapi_newMediaObject($req_params) {
+function blogapi_new_media_object($req_params) {
   return blogapi_error('not implemented');
 }
 
-function blogapi_getCategoryList($req_params) {
+function blogapi_get_category_list($req_params) {
   if (!function_exists('taxonomy_get_vocabularies')) {
     return blogapi_error('no categories');
   }
@@ -228,7 +232,7 @@ function blogapi_getCategoryList($req_params) {
   return new xmlrpcresp(new xmlrpcval($categories, "array"));
 }
 
-function blogapi_getPostCategories($req_params) {
+function blogapi_get_post_categories($req_params) {
   $params = blogapi_convert($req_params);
   $user = blogapi_validate_user($params[1], $params[2]);
   if (!$user->uid) {
@@ -250,7 +254,7 @@ function blogapi_getPostCategories($req_params) {
   return new xmlrpcresp(new xmlrpcval($categories, "array"));
 }
 
-function blogapi_setPostCategories($req_params) {
+function blogapi_set_post_categories($req_params) {
   $params = blogapi_convert($req_params);
   $user = blogapi_validate_user($params[1], $params[2]);
   if (!$user->uid) {
@@ -266,7 +270,7 @@ function blogapi_setPostCategories($req_params) {
   return new xmlrpcresp(new xmlrpcval(true, 'boolean'));
 }
 
-function blogapi_getRecentPosts($req_params) {
+function blogapi_get_recent_posts($req_params) {
   $params = blogapi_convert($req_params);
   $user = blogapi_validate_user($params[1], $params[2]);
   if (!$user->uid) {
@@ -317,8 +321,14 @@ function blogapi_validate_user($username, $password) {
   return $user;
 }
 
-function blogapi_blogger_title($contents) {
-  list($first, $rest) = explode("\n", $contents, 2);
-  return substr(strip_tags($first), 0, 30);
+function blogapi_blogger_title(&$contents) {
+  if (eregi("<title>(.*)</title>", $contents, $title)) {
+      $title = strip_tags($title[0]);
+      $contents = ereg_replace("<title>.*</title>", "", $cparams[4]);
+  }
+  else {
+    list($title, $rest) = explode("\n", $contents, 2);
+  }
+  return $title;
 }
 ?>
