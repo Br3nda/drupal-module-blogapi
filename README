@@ -1,7 +1,0 @@
-Support for additional xmlrpc blogging APIs. Currently supported are:
-* BloggerAPI 
-* MetaWeblogAPI
-* (some) moveable type extensions
-
-Any bugs, features, support for additional protocols can be directed 
-to walkah@walkah.net
