@@ -1,0 +1,10 @@
+; $Id: blogapi.info,v 1.1 2009/10/06 21:07:20 cweagans Exp $
+
+name = Blog API
+description = Allows users to post content using applications that support XML-RPC blog APIs.
+package = Core
+version = VERSION
+core = 7.x
+files[] = blogapi.module
+files[] = blogapi.install
+files[] = blogapi.test
