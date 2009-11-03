@@ -1,5 +1,5 @@
 <?php
-// $Id: blogapi.test,v 1.1 2009/10/06 21:07:20 cweagans Exp $
+// $Id: blogapi.test,v 1.2 2009/11/03 08:48:19 cweagans Exp $
 
 class BlogAPITestCase extends DrupalWebTestCase {
   public static function getInfo() {
@@ -21,12 +21,6 @@ class BlogAPITestCase extends DrupalWebTestCase {
     global $base_url;
     // Create user.
     $web_user = $this->drupalCreateUser(array('create blog content', 'delete own blog content', 'edit own blog content', 'administer content with blog api'));
-    // Create admin user and taxonomy for later use.
-    $admin_user = $this->drupalCreateUser(array('administer taxonomy'));
-    $this->drupalLogin($admin_user);
-    $vid = $this->addVocabulary('simpletest_vocab');
-    $term_1 = $this->addTerm($vid, 'simpletest_term1');
-    $term_2 = $this->addTerm($vid, 'simpletest_term2');
 
     // Init common variables.
     $local = url($base_url . '/xmlrpc.php', array('external' => TRUE));
@@ -80,6 +74,15 @@ class BlogAPITestCase extends DrupalWebTestCase {
     // Check uploaded file.
     $this->drupalGet($url);
     $this->assertEqual($this->drupalGetContent(), $file_contents, t('Uploaded contents verified.'));
+
+    // Test category functionality
+
+    // Create admin user to manage taxonomy
+    $admin_user = $this->drupalCreateUser(array('administer taxonomy'));
+    $this->drupalLogin($admin_user);
+    $vid = $this->addVocabulary('simpletest_vocab', $blog_id);
+    $term_1 = $this->addTerm($vid, 'simpletest_term1');
+    $term_2 = $this->addTerm($vid, 'simpletest_term2');
 
     // Set post categories.
     $categories = array(array('categoryId' => $term_1));

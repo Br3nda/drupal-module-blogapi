@@ -1,5 +1,5 @@
 <?php
-// $Id: blogapi.module,v 1.4 2009/10/06 21:07:20 cweagans Exp $
+// $Id: blogapi.module,v 1.5 2009/11/03 08:48:19 cweagans Exp $
 
 /**
  * @file
@@ -207,12 +207,12 @@ function blogapi_blogger_new_post($appkey, $blogid, $username, $password, $conte
 
   // Check for bloggerAPI vs. metaWeblogAPI.
   if (is_array($content)) {
-    $edit['title'] = $content['title'];
-    $edit['body'] = $content['description'];
+    $edit['title'][FIELD_LANGUAGE_NONE][0]['value'] = $content['title'];
+    $edit['body'][FIELD_LANGUAGE_NONE][0]['value'] = $content['description'];
     _blogapi_mt_extra($edit, $content);
   }
   else {
-    $edit['title'] = blogapi_blogger_title($content);
+    $edit['title'][FIELD_LANGUAGE_NONE][0]['value'] = blogapi_blogger_title($content);
     $edit['body'][FIELD_LANGUAGE_NONE][0]['value'] = $content;
   }
 
@@ -236,7 +236,7 @@ function blogapi_blogger_new_post($appkey, $blogid, $username, $password, $conte
     return blogapi_error(implode("\n", $errors));
   }
 
-  $node = node_submit($edit);
+  $node = (object)node_submit($edit);
   node_save($node);
   if ($node->nid) {
     watchdog('content', '@type: added %title using blog API.', array('@type' => $node->type, '%title' => $node->title), WATCHDOG_NOTICE, l(t('view'), "node/$node->nid"));
@@ -273,12 +273,12 @@ function blogapi_blogger_edit_post($appkey, $postid, $username, $password, $cont
 
   // Check for bloggerAPI vs. metaWeblogAPI.
   if (is_array($content)) {
-    $node->title = $content['title'];
+    $node->title[FIELD_LANGUAGE_NONE][0]['value'] = $content['title'];
     $node->body[FIELD_LANGUAGE_NONE][0]['value'] = $content['description'];
     _blogapi_mt_extra($node, $content);
   }
   else {
-    $node->title = blogapi_blogger_title($content);
+    $node->title[FIELD_LANGUAGE_NONE][0]['value'] = blogapi_blogger_title($content);
     $node->body[FIELD_LANGUAGE_NONE][0]['value'] = $content;
   }
 
@@ -379,16 +379,20 @@ function blogapi_blogger_get_recent_posts($appkey, $blogid, $username, $password
   }
 
   if ($bodies) {
-    $result = db_query_range("SELECT n.nid, n.title, n.comment, n.created, u.name FROM {node} n, {node_revision} r, {users} u WHERE n.uid = u.uid AND n.vid = r.vid AND n.type = :type AND n.uid = :uid ORDER BY n.created DESC",  array(
+    $result = db_query_range("SELECT n.nid, n.title, n.comment, n.created, u.name FROM {node} n, {node_revision} r, {users} u WHERE n.uid = u.uid AND n.vid = r.vid AND n.type = :type AND n.uid = :uid ORDER BY n.created DESC", 0, $number_of_posts,
+      array(
       ':type' => $blogid,
       ':uid' => $user->uid
-    ), 0, $number_of_posts);
+      )
+    );
   }
   else {
-    $result = db_query_range("SELECT n.nid, n.title, n.created, u.name FROM {node} n, {users} u WHERE n.uid = u.uid AND n.type = :type AND n.uid = :uid ORDER BY n.created DESC", array(
+    $result = db_query_range("SELECT n.nid, n.title, n.created, u.name FROM {node} n, {users} u WHERE n.uid = u.uid AND n.type = :type AND n.uid = :uid ORDER BY n.created DESC", 0, $number_of_posts,
+      array(
       ':type' => $blogid,
       ':uid' => $user->uid
-    ), 0, $number_of_posts);
+      )
+    );
   }
   $blogs = array();
   foreach ($result as $blog) {
