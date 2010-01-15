@@ -1,5 +1,5 @@
 <?php
-// $Id: blogapi.module,v 1.5 2009/11/03 08:48:19 cweagans Exp $
+// $Id: blogapi.module,v 1.6 2010/01/15 21:55:47 cweagans Exp $
 
 /**
  * @file
@@ -842,10 +842,15 @@ function blogapi_menu() {
  */
 function blogapi_init() {
   if (drupal_is_front_page()) {
-    drupal_add_link(array('rel' => 'EditURI',
-                          'type' => 'application/rsd+xml',
-                          'title' => t('RSD'),
-                          'href' => url('blogapi/rsd', array('absolute' => TRUE))));
+    drupal_add_html_head_link(
+      array(
+        'rel' => 'EditURI',
+        'type' => 'application/rsd+xml',
+        'title' => t('RSD'),
+        'href' => url('blogapi/rsd', array('absolute' => TRUE))
+      ),
+      TRUE
+    );
   }
 }
 
