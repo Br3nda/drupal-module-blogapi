@@ -1,5 +1,5 @@
 <?php
-// $Id: blogapi.install,v 1.1 2009/10/06 21:07:20 cweagans Exp $
+// $Id: blogapi.install,v 1.2 2010/01/15 22:02:11 cweagans Exp $
 
 /**
  * @file
@@ -20,6 +20,18 @@ function blogapi_install() {
 function blogapi_uninstall() {
   // Remove tables.
   drupal_uninstall_schema('blogapi');
+
+  // Remove variables
+  variable_del('blogapi_node_types');
+  variable_del('blogapi_extensions_default');
+  variable_del('blogapi_uploadsize_default');
+  variable_del('blogapi_usersize_default');
+
+  foreach (user_roles(FALSE, 'administer content with blog api') as $rid => $role) {
+    variable_del('blogapi_extensions_'. $rid);
+    variable_del('blogapi_uploadsize_'. $rid);
+    variable_del('blogapi_usersize_'. $rid);
+}
 }
 
 

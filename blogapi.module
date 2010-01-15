@@ -1,5 +1,5 @@
 <?php
-// $Id: blogapi.module,v 1.7 2010/01/15 21:58:26 cweagans Exp $
+// $Id: blogapi.module,v 1.8 2010/01/15 22:02:11 cweagans Exp $
 
 /**
  * @file
@@ -727,7 +727,7 @@ function blogapi_blogger_title(&$contents) {
  */
 function blogapi_admin_settings() {
   $node_types = array_map('check_plain', node_type_get_names());
-  $defaults = isset($node_types['blog']) ? array('blog' => 1) : array();
+  $defaults = isset($node_types['blog']) ? array('blog' => 'blog') : array();
   $form['blogapi_node_types'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Enable for external blogging clients'),
@@ -861,7 +861,7 @@ function blogapi_rsd() {
   $base = url('', array('absolute' => TRUE));
   $blogid = 1; # until we figure out how to handle multiple bloggers
 
-  drupal_set_header('Content-Type', 'application/rsd+xml; charset=utf-8');
+  drupal_add_http_header('Content-Type', 'application/rsd+xml; charset=utf-8');
   print <<<__RSD__
 <?xml version="1.0"?>
 <rsd version="1.0" xmlns="http://archipelago.phrasewise.com/rsd">
@@ -971,7 +971,7 @@ function _blogapi_validate_blogid($blogid) {
 }
 
 function _blogapi_get_node_types() {
-  $available_types = array_keys(array_filter(variable_get('blogapi_node_types', array('blog' => 1))));
+  $available_types = array_keys(array_filter(variable_get('blogapi_node_types', array('blog' => 'blog'))));
   $types = array();
   foreach (node_type_get_types() as $type => $name) {
     if (node_access('create', $type) && in_array($type, $available_types)) {
