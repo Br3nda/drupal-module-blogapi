@@ -1,5 +1,5 @@
 <?php
-// $Id: blogapi.module,v 1.8 2010/01/15 22:02:11 cweagans Exp $
+// $Id: blogapi.module,v 1.9 2010/01/15 22:34:12 cweagans Exp $
 
 /**
  * @file
@@ -762,7 +762,7 @@ function blogapi_admin_settings() {
     '#size' => 5,
     '#maxlength' => 5,
     '#description' => t('The default maximum file size a user can upload.'),
-    '#field_suffix' => t('MB')
+    '#field_suffix' => t('MB'),
   );
 
   $form['settings_general']['blogapi_usersize_default'] = array(
@@ -772,7 +772,7 @@ function blogapi_admin_settings() {
     '#size' => 5,
     '#maxlength' => 5,
     '#description' => t('The default maximum size of all files a user can have on the site.'),
-    '#field_suffix' => t('MB')
+    '#field_suffix' => t('MB'),
   );
 
   $form['settings_general']['upload_max_size'] = array('#value' => '<p>' . t('Your PHP settings limit the maximum file size per upload to %size.', array('%size' => format_size(file_upload_max_size()))) . '</p>');
@@ -783,7 +783,7 @@ function blogapi_admin_settings() {
   foreach ($roles as $rid => $role) {
     $form['settings_role_' . $rid] = array(
       '#type' => 'fieldset',
-      '#title' => t('Settings for @role', array('@role' => $role)),
+      '#title' => t('Settings for @role role', array('@role' => $role)),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     );
@@ -801,6 +801,7 @@ function blogapi_admin_settings() {
       '#size' => 5,
       '#maxlength' => 5,
       '#description' => t('The maximum size of a file a user can upload (in megabytes).'),
+      '#field_suffix' => t('MB'),
     );
     $form['settings_role_' . $rid]['blogapi_usersize_' . $rid] = array(
       '#type' => 'textfield',
@@ -809,6 +810,7 @@ function blogapi_admin_settings() {
       '#size' => 5,
       '#maxlength' => 5,
       '#description' => t('The maximum size of all files a user can have on the site (in megabytes).'),
+      '#field_suffix' => t('MB'),
     );
   }
 
