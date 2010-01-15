@@ -1,5 +1,5 @@
 <?php
-// $Id: blogapi.install,v 1.2 2010/01/15 22:02:11 cweagans Exp $
+// $Id: blogapi.install,v 1.3 2010/01/15 22:15:39 cweagans Exp $
 
 /**
  * @file
@@ -10,16 +10,13 @@
  * Implement hook_install().
  */
 function blogapi_install() {
-  // Create tables.
-  drupal_install_schema('blogapi');
+  
 }
 
 /**
  * Implement hook_uninstall().
  */
 function blogapi_uninstall() {
-  // Remove tables.
-  drupal_uninstall_schema('blogapi');
 
   // Remove variables
   variable_del('blogapi_node_types');
@@ -31,7 +28,7 @@ function blogapi_uninstall() {
     variable_del('blogapi_extensions_'. $rid);
     variable_del('blogapi_uploadsize_'. $rid);
     variable_del('blogapi_usersize_'. $rid);
-}
+  }
 }
 
 
