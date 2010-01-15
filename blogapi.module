@@ -1,5 +1,5 @@
 <?php
-// $Id: blogapi.module,v 1.9 2010/01/15 22:34:12 cweagans Exp $
+// $Id: blogapi.module,v 1.10 2010/01/15 23:02:21 cweagans Exp $
 
 /**
  * @file
@@ -37,106 +37,148 @@ function blogapi_permission() {
  */
 function blogapi_xmlrpc() {
   return array(
+
     array(
       'blogger.getUsersBlogs',
       'blogapi_blogger_get_users_blogs',
       array('array', 'string', 'string', 'string'),
-      t('Returns a list of blogs to which an author has posting privileges.')),
+      t('Returns a list of blogs to which an author has posting privileges.'),
+    ),
+
     array(
       'blogger.getUserInfo',
       'blogapi_blogger_get_user_info',
       array('struct', 'string', 'string', 'string'),
-      t('Returns information about an author in the system.')),
+      t('Returns information about an author in the system.'),
+    ),
+
     array(
       'blogger.newPost',
       'blogapi_blogger_new_post',
       array('string', 'string', 'string', 'string', 'string', 'string', 'boolean'),
-      t('Creates a new post, and optionally publishes it.')),
+      t('Creates a new post, and optionally publishes it.'),
+    ),
+
     array(
       'blogger.editPost',
       'blogapi_blogger_edit_post',
       array('boolean', 'string', 'string', 'string', 'string', 'string', 'boolean'),
-      t('Updates the information about an existing post.')),
+      t('Updates the information about an existing post.'),
+    ),
+
     array(
       'blogger.getPost',
       'blogapi_blogger_get_post',
       array('struct', 'string', 'string', 'string', 'string'),
-      t('Returns information about a specific post.')),
+      t('Returns information about a specific post.'),
+    ),
+
     array(
       'blogger.deletePost',
       'blogapi_blogger_delete_post',
       array('boolean', 'string', 'string', 'string', 'string', 'boolean'),
-      t('Deletes a post.')),
+      t('Deletes a post.'),
+    ),
+
     array(
       'blogger.getRecentPosts',
       'blogapi_blogger_get_recent_posts',
       array('array', 'string', 'string', 'string', 'string', 'int'),
-      t('Returns a list of the most recent posts in the system.')),
+      t('Returns a list of the most recent posts in the system.'),
+    ),
+
     array(
       'metaWeblog.newPost',
       'blogapi_metaweblog_new_post',
       array('string', 'string', 'string', 'string', 'struct', 'boolean'),
-      t('Creates a new post, and optionally publishes it.')),
+      t('Creates a new post, and optionally publishes it.'),
+    ),
+
     array(
       'metaWeblog.editPost',
       'blogapi_metaweblog_edit_post',
       array('boolean', 'string', 'string', 'string', 'struct', 'boolean'),
-      t('Updates information about an existing post.')),
+      t('Updates information about an existing post.'),
+    ),
+
     array(
       'metaWeblog.getPost',
       'blogapi_metaweblog_get_post',
       array('struct', 'string', 'string', 'string'),
-      t('Returns information about a specific post.')),
+      t('Returns information about a specific post.'),
+    ),
+
     array(
       'metaWeblog.newMediaObject',
       'blogapi_metaweblog_new_media_object',
       array('string', 'string', 'string', 'string', 'struct'),
-      t('Uploads a file to your webserver.')),
+      t('Uploads a file to your webserver.'),
+    ),
+
     array(
       'metaWeblog.getCategories',
       'blogapi_metaweblog_get_category_list',
       array('struct', 'string', 'string', 'string'),
-      t('Returns a list of all categories to which the post is assigned.')),
+      t('Returns a list of all categories to which the post is assigned.'),
+    ),
+
     array(
       'metaWeblog.getRecentPosts',
       'blogapi_metaweblog_get_recent_posts',
       array('array', 'string', 'string', 'string', 'int'),
-      t('Returns a list of the most recent posts in the system.')),
+      t('Returns a list of the most recent posts in the system.'),
+    ),
+
     array(
       'mt.getRecentPostTitles',
       'blogapi_mt_get_recent_post_titles',
       array('array', 'string', 'string', 'string', 'int'),
-      t('Returns a bandwidth-friendly list of the most recent posts in the system.')),
+      t('Returns a bandwidth-friendly list of the most recent posts in the system.'),
+    ),
+
     array(
       'mt.getCategoryList',
       'blogapi_mt_get_category_list',
       array('array', 'string', 'string', 'string'),
-      t('Returns a list of all categories defined in the blog.')),
+      t('Returns a list of all categories defined in the blog.'),
+    ),
+
     array(
       'mt.getPostCategories',
       'blogapi_mt_get_post_categories',
       array('array', 'string', 'string', 'string'),
-      t('Returns a list of all categories to which the post is assigned.')),
+      t('Returns a list of all categories to which the post is assigned.'),
+    ),
+
     array(
       'mt.setPostCategories',
       'blogapi_mt_set_post_categories',
       array('boolean', 'string', 'string', 'string', 'array'),
-      t('Sets the categories for a post.')),
+      t('Sets the categories for a post.'),
+    ),
+
     array(
       'mt.supportedMethods',
       'xmlrpc_server_list_methods',
       array('array'),
-      t('Retrieve information about the XML-RPC methods supported by the server.')),
+      t('Retrieve information about the XML-RPC methods supported by the server.'),
+    ),
+
     array(
       'mt.supportedTextFilters',
       'blogapi_mt_supported_text_filters',
       array('array'),
-      t('Retrieve information about the text formatting plugins supported by the server.')),
+      t('Retrieve information about the text formatting plugins supported by the server.'),
+    ),
+
     array(
       'mt.publishPost',
       'blogapi_mt_publish_post',
       array('boolean', 'string', 'string', 'string'),
-      t('Publish (rebuild) all of the static files related to an entry from your blog. Equivalent to saving an entry in the system (but without the ping).')));
+      t('Publish (rebuild) all of the static files related to an entry from your blog. Equivalent to saving an entry in the system (but without the ping).'),
+    ),
+
+  );
 }
 
 /**
